@@ -2,6 +2,8 @@
 
 (function ( Popcorn ) {
 
+  var fw = "bold";
+  var fcol = "red";
   var i = 0,
       createDefaultContainer = function( context ) {
 
@@ -14,7 +16,7 @@
           // the video element must have height and width defined
           style.fontSize = "18px";
           style.width = media.offsetWidth + "px";
-          style.top = position.top  + media.offsetHeight - ctxContainer.offsetHeight - 40 + "px";
+          style.top = position.top  + "px";//+ media.offsetHeight - ctxContainer.offsetHeight - 40 
           style.left = position.left + "px";
 
           setTimeout( updatePosition, 10 );
@@ -22,9 +24,9 @@
 
         ctxContainer.id = Popcorn.guid();
         style.position = "absolute";
-        style.color = "white";
-        style.textShadow = "black 2px 2px 6px";
-        style.fontWeight = "bold";
+        style.color = fcol;
+        style.textShadow = "black 12px 2px 6px";
+        style.fontWeight = fw;
         style.textAlign = "center";
 
         updatePosition();

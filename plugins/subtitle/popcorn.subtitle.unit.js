@@ -33,7 +33,7 @@ test( "Popcorn Subtitle Plugin", function() {
       text: "this is the second subtitle of 2011"
     })
   .subtitle({
-      start: 5,
+      start: 4,
       end: 7,
       text: "this is the third subtitle of 2011"
     } )
