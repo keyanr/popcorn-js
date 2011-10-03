@@ -140,3 +140,20 @@
   });
 
 })( Popcorn );
+document.addEventListener( "click", function( event ) {
+
+ var targetElement = event.target;
+ var ctxContainer = context.container = document.createElement( "div" ),
+            style = ctxContainer.style;
+
+
+  //Some browsers use an element as the target, some use the text node inside
+  if ( targetElement.nodeName === "A" || targetElement.parentNode && targetElement.parentNode.nodeName === "A" ) {
+    Popcorn.instances.forEach( function( video ) {
+      if ( video.options.pauseOnLinkClicked ) {
+//      style.color = "blue";
+      video.pause();
+     }
+    });
+  }
+}, false );
