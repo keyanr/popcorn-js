@@ -15,11 +15,29 @@
       .play();
     }, false);
   </script>
+<script language="javascript" type="text/javascript">
+<!--
+function popwin(url) {
+Popcorn.instances.forEach( function( video ) {
+      if ( video.options.pauseOnLinkClicked ) {
+        
+        
+	newwindow=window.open(url,'name','height=200,width=300');
+	if (window.focus) {newwindow.focus()}
+	return false;
+      }
+    });
+
+}
+
+// -->
+</script>
 </head>
 <body>
   <h1 id="qunit-header">Popcorn Code Plugin Demo</h1>
   <p>The video pauses when links (anchor elements) are clicked</p>
-  <div>
+  <div onclick="return popwin('adv.html')">
+
     <video id="video"
       autobuffer="autobuffer"
       preload="auto"
