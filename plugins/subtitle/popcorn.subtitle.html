@@ -6,7 +6,23 @@
   <script src="popcorn.subtitle.js"></script>
   <script>
     var fw, fcol;
-//    document.addEventListener( "DOMContentLoaded", function() {
+    document.addEventListener( "DOMContentLoaded", function() {
+      var p = Popcorn( "#video" )
+      .volume( 0 )
+      .play()
+      .subtitle({
+        start: 5,
+        end: 15,
+        text: "this is the first subtitle of 2011",
+      })
+      .subtitle({
+        start: 20,
+        end: 45,
+        text: "this is the second subtitle of 2011",
+      });
+      document.getElementById("txt1").value="";
+
+    }, false);
 function play(){
       var p = Popcorn( "#video" )
       .volume( 0 )
@@ -25,6 +41,7 @@ function play(){
 
 function changeColor(color){
     fcol=color;
+    document.getElementById("txt1").value=color;
 };
 
 function pause(){
@@ -35,7 +52,7 @@ function pause(){
     });
 };
 
-//    }, false);
+
 
   </script>
 </head>
@@ -80,6 +97,14 @@ function pause(){
     </td>
     <td>
      <input type="button" value="white" onClick="changeColor('white');"/>
+    </td>
+    </tr>
+    <tr>
+    <td>
+    The color you select is:
+    </td>
+    <td colspan="3">
+    <input type="textbox" value="" id="txt1"/>
     </td>
     </tr>
     </table>
