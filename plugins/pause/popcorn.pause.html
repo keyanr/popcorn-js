@@ -7,6 +7,7 @@
   <script src="popcorn.pause.js"></script>
   <script>
     var output;
+    var flag=false;
 
     document.addEventListener( "DOMContentLoaded", function() {
       var p = Popcorn( "#video" , {
@@ -14,23 +15,20 @@
       })
       .play();
     }, false);
-  </script>
-<script language="javascript" type="text/javascript">
-<!--
+
 function popwin(url) {
-Popcorn.instances.forEach( function( video ) {
-      if ( video.options.pauseOnLinkClicked ) {
-        
+
+      if (!flag){
+        flag=!flag;
         
 	newwindow=window.open(url,'name','height=200,width=300');
 	if (window.focus) {newwindow.focus()}
 	return false;
       }
-    });
+
 
 }
 
-// -->
 </script>
 </head>
 <body>
