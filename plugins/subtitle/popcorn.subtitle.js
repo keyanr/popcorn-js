@@ -1,9 +1,11 @@
 // PLUGIN: Subtitle
 
+
+
 (function ( Popcorn ) {
 
-  var fw = "bold";
-  var fcol = "red";
+  fw = "bold";
+  fcol = "blue";
   var i = 0,
       createDefaultContainer = function( context ) {
 
@@ -16,7 +18,7 @@
           // the video element must have height and width defined
           style.fontSize = "18px";
           style.width = media.offsetWidth + "px";
-          style.top = position.top  + "px";//+ media.offsetHeight - ctxContainer.offsetHeight - 40 
+          style.top = position.top  + media.offsetHeight - ctxContainer.offsetHeight - 40 + "px";
           style.left = position.left + "px";
 
           setTimeout( updatePosition, 10 );
@@ -33,6 +35,7 @@
 
         context.media.parentNode.appendChild( ctxContainer );
       };
+
 
   /**
    * Subtitle popcorn plug-in
@@ -139,21 +142,5 @@
 
   });
 
+
 })( Popcorn );
-document.addEventListener( "click", function( event ) {
-
- var targetElement = event.target;
- var ctxContainer = context.container = document.createElement( "div" ),
-            style = ctxContainer.style;
-
-
-  //Some browsers use an element as the target, some use the text node inside
-  if ( targetElement.nodeName === "A" || targetElement.parentNode && targetElement.parentNode.nodeName === "A" ) {
-    Popcorn.instances.forEach( function( video ) {
-      if ( video.options.pauseOnLinkClicked ) {
-//      style.color = "blue";
-      video.pause();
-     }
-    });
-  }
-}, false );
