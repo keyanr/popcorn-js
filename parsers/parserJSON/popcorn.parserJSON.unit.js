@@ -16,11 +16,11 @@ test("Popcorn 0.3 JSON Parser Plugin", function () {
   }
 
   poppercorn.parseJSON("data/video.json");
+  poppercorn.pause();
 
   expect(expects);
 
   stop( 10000 );
-
 
   trackData = poppercorn.data;
   trackEvents = trackData.trackEvents;
@@ -29,15 +29,11 @@ test("Popcorn 0.3 JSON Parser Plugin", function () {
     url: 'data/video.json',
     success: function( data ) {
 
-      var idx = 0;
-
-      //console.log( data );
+      var idx = 1;
 
       Popcorn.forEach( data.json.data, function (dataObj) {
 
-        //console.log( dataObj );
         Popcorn.forEach( dataObj, function ( obj, key ) {
-
           equals( trackData.history[idx].indexOf(key), 0, "history item '" + trackData.history[idx] + "' matches data key '"+ key+ "' at correct index" );
           plus();
 
@@ -49,18 +45,16 @@ test("Popcorn 0.3 JSON Parser Plugin", function () {
     }
   });
 
-  poppercorn.listen("timeupdate", function ( event ) {
-
-
-    if ( Math.round( this.currentTime()) === 3 && !finished ) {
+  poppercorn.exec( 3, function() {
+    if ( !finished ) {
 
       finished = true;
 
-      equals( trackEvents.byStart.length,  numLoadingEvents + 2 , "trackEvents.byStart.length === (5 loaded, 2 padding) " );
+      equals( trackEvents.byStart.length,  numLoadingEvents + 3 , "trackEvents.byStart.length === (5 loaded, 2 padding) " );
       plus();
 
 
-      equals( $("#video-iframe-container").children().length, 2, '$("#video-iframe-container").children().length' )
+      equals( $("#video-iframe-container").children().length, 2, '$("#video-iframe-container").children().length' );
       plus();
       equals( $("#video-map-container").children().length, 1, '$("#video-map-container").children().length'  );
       plus();
@@ -72,7 +66,9 @@ test("Popcorn 0.3 JSON Parser Plugin", function () {
     }
   });
 
-  poppercorn.currentTime(0).play()
+  poppercorn.listen( "canplayall", function() {
+    this.play();
+  });
 });
 
 test("Popcorn 0.3 JSON Parser Plugin - AUDIO", function () {
@@ -85,13 +81,27 @@ test("Popcorn 0.3 JSON Parser Plugin - AUDIO", function () {
       trackData,
       trackEvents,
       interval,
-      audiocorn = Popcorn("#audio");
+      audiocorn;
+
+  function getInstance( id ) {
+    var instance;
+    for ( var i = 0, l = Popcorn.instances.length; i < l; i++ ) {
+      instance = instance = Popcorn.instances[ i ];
+      if ( instance.media.id === id ) {
+        return instance;
+      }
+    }
+    throw( "instance not found" );
+  }
+
+  audiocorn = getInstance( "audio" );
 
   function plus() {
     if ( ++count === expects ) {
       start();
       // clean up added events after tests
       clearInterval( interval );
+      audiocorn.pause();
     }
   }
 
@@ -115,8 +125,7 @@ test("Popcorn 0.3 JSON Parser Plugin - AUDIO", function () {
 
           var historyItem = trackData.history[ idx ];
 
-          console.log( historyItem, key );
-          equal( historyItem.indexOf(key), 0, "history item '" + historyItem + "' matches data key '"+ key+ "' at correct index" );
+          equal( historyItem.indexOf( key ), 0, "history item '" + historyItem + "' matches data key '"+ key+ "' at correct index" );
           plus();
 
           idx++;

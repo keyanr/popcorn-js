@@ -5,7 +5,7 @@
   var fw = "bold";
   var fcol = "red";
   var i = 0,
-      createDefaultContainer = function( context ) {
+      createDefaultContainer = function( context, id ) {
 
         var ctxContainer = context.container = document.createElement( "div" ),
             style = ctxContainer.style,
@@ -22,7 +22,7 @@
           setTimeout( updatePosition, 10 );
         };
 
-        ctxContainer.id = Popcorn.guid();
+        ctxContainer.id = id || Popcorn.guid();
         style.position = "absolute";
         style.color = fcol;
         style.textShadow = "black 12px 2px 6px";
@@ -32,6 +32,8 @@
         updatePosition();
 
         context.media.parentNode.appendChild( ctxContainer );
+
+        return ctxContainer;
       };
 
   /**
@@ -99,7 +101,8 @@
 
         // if a target is specified, use that
         if ( options.target && options.target !== "subtitle-container" ) {
-          options.container = document.getElementById( options.target );
+          // In case the target doesn't exist in the DOM
+          options.container = document.getElementById( options.target ) || createDefaultContainer( this, options.target );
         } else {
           // use shared default container
           options.container = this.container;
@@ -109,7 +112,7 @@
         options.innerContainer = newdiv;
 
         options.showSubtitle = function() {
-          options.innerContainer.innerHTML = options.text;
+          options.innerContainer.innerHTML = options.text || "";
         };
       },
       /**
