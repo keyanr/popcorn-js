@@ -1,13 +1,11 @@
-// PLUGIN: Subtitle
-
 (function ( Popcorn ) {
 
-  var fw = "bold";
-  var fcol = "red";
   var i = 0,
       createDefaultContainer = function( context, id ) {
+	  
+	    return function(dfc){
 
-        var ctxContainer = context.container = document.createElement( "div" ),
+        var ctxContainer = context.container = document.createElement( dfc),
             style = ctxContainer.style,
             media = context.media;
 
@@ -16,7 +14,7 @@
           // the video element must have height and width defined
           style.fontSize = "18px";
           style.width = media.offsetWidth + "px";
-          style.top = position.top  + "px";//+ media.offsetHeight - ctxContainer.offsetHeight - 40 
+          style.top = position.top + media.offsetHeight - ctxContainer.offsetHeight - 40 + "px";
           style.left = position.left + "px";
 
           setTimeout( updatePosition, 10 );
@@ -24,9 +22,9 @@
 
         ctxContainer.id = id || Popcorn.guid();
         style.position = "absolute";
-        style.color = fcol;
-        style.textShadow = "black 12px 2px 6px";
-        style.fontWeight = fw;
+        style.color = "white";
+        style.textShadow = "black 2px 2px 6px";
+        style.fontWeight = "bold";
         style.textAlign = "center";
 
         updatePosition();
@@ -34,31 +32,32 @@
         context.media.parentNode.appendChild( ctxContainer );
 
         return ctxContainer;
+		}
       };
 
   /**
-   * Subtitle popcorn plug-in
-   * Displays a subtitle over the video, or in the target div
-   * Options parameter will need a start, and end.
-   * Optional parameters are target and text.
-   * Start is the time that you want this plug-in to execute
-   * End is the time that you want this plug-in to stop executing
-   * Target is the id of the document element that the content is
-   *  appended to, this target element must exist on the DOM
-   * Text is the text of the subtitle you want to display.
-   *
-   * @param {Object} options
-   *
-   * Example:
-     var p = Popcorn('#video')
-        .subtitle({
-          start:            5,                 // seconds, mandatory
-          end:              15,                // seconds, mandatory
-          text:             'Hellow world',    // optional
-          target:           'subtitlediv',     // optional
-        } )
-   *
-   */
+* Subtitle popcorn plug-in
+* Displays a subtitle over the video, or in the target div
+* Options parameter will need a start, and end.
+* Optional parameters are target and text.
+* Start is the time that you want this plug-in to execute
+* End is the time that you want this plug-in to stop executing
+* Target is the id of the document element that the content is
+* appended to, this target element must exist on the DOM
+* Text is the text of the subtitle you want to display.
+*
+* @param {Object} options
+*
+* Example:
+var p = Popcorn('#video')
+.subtitle({
+start: 5, // seconds, mandatory
+end: 15, // seconds, mandatory
+text: 'Hellow world', // optional
+target: 'subtitlediv', // optional
+} )
+*
+*/
 
   Popcorn.plugin( "subtitle" , {
 
@@ -96,8 +95,10 @@
         newdiv.style.display = "none";
 
         // Creates a div for all subtitles to use
-        ( !this.container && ( !options.target || options.target === "subtitle-container" ) ) &&
-          createDefaultContainer( this );
+        if( !this.container && ( !options.target || options.target === "subtitle-container" ) ) {
+          var cc = createDefaultContainer( this );
+		  cc("div");
+		 }
 
         // if a target is specified, use that
         if ( options.target && options.target !== "subtitle-container" ) {
@@ -116,21 +117,21 @@
         };
       },
       /**
-       * @member subtitle
-       * The start function will be executed when the currentTime
-       * of the video  reaches the start time provided by the
-       * options variable
-       */
+* @member subtitle
+* The start function will be executed when the currentTime
+* of the video reaches the start time provided by the
+* options variable
+*/
       start: function( event, options ){
         options.innerContainer.style.display = "inline";
         options.showSubtitle( options, options.text );
       },
       /**
-       * @member subtitle
-       * The end function will be executed when the currentTime
-       * of the video  reaches the end time provided by the
-       * options variable
-       */
+* @member subtitle
+* The end function will be executed when the currentTime
+* of the video reaches the end time provided by the
+* options variable
+*/
       end: function( event, options ) {
         options.innerContainer.style.display = "none";
         options.innerContainer.innerHTML = "";
@@ -143,20 +144,3 @@
   });
 
 })( Popcorn );
-document.addEventListener( "click", function( event ) {
-
- var targetElement = event.target;
- var ctxContainer = context.container = document.createElement( "div" ),
-            style = ctxContainer.style;
-
-
-  //Some browsers use an element as the target, some use the text node inside
-  if ( targetElement.nodeName === "A" || targetElement.parentNode && targetElement.parentNode.nodeName === "A" ) {
-    Popcorn.instances.forEach( function( video ) {
-      if ( video.options.pauseOnLinkClicked ) {
-//      style.color = "blue";
-      video.pause();
-     }
-    });
-  }
-}, false );
